@@ -2,21 +2,25 @@
 #include "queue.h"
 
 void Queue::push(int x) {
-  Node* new_node(x);
+  Node* node = new Node(x);
   if (is_empty())
-    first = last = new_node;
+    first_ = last_ = node;
   else {
-    last->next = new_node;
-    last = new_node;
+    last_->next_ = node;
+    last_ = node;
   }
+  size_++;
 }
 
 int Queue::front(void) {
   if (is_empty()) return -1;
-  return first->item;
+  return first_->item_;
 }
 
 void Queue::pop(void) {
-  if (is_empty()) return;
-  first = first->next;
+  if (first_ == last_)
+    first_ = last_ = NULL;
+  else 
+    first_ = first_->next_;
+  size_--;
 }
