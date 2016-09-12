@@ -5,6 +5,16 @@ using namespace std;
 
 int main() {
   Queue q;
-  cout << q.size() << endl;
-	return 0;
+  q.push(3);
+  q.push(5);
+  cout << "Front: " << q.front() << ", Size: " << q.size() << endl;
+  q.pop();
+  cout << "Front: " << q.front() << ", Size: " << q.size() << endl;
+  q.pop();
+  cout << "Front: " << q.front() << ", Size: " << q.size() << endl;
+  q.push(1);
+  cout << "Front: " << q.front() << ", Size: " << q.size() << endl;
+  q.push(2);
+  cout << "Front: " << q.front() << ", Size: " << q.size() << endl;
+  return 0;
 }
