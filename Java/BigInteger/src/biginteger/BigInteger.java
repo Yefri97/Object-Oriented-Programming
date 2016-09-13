@@ -15,6 +15,10 @@ public class BigInteger {
     public void setDigAt(int idx, int dig) { number.setItemAt(idx, (char) (dig + '0')); }
     public int getDigAt(int idx) { return number.getItemAt(idx) - '0'; }
     
+    public static boolean lessThan(BigInteger a, BigInteger b) {
+        return true;
+    }
+    
     public void add(BigInteger n) {
         int len = Math.max(size(), n.size());
         int carry = 0;
@@ -24,6 +28,10 @@ public class BigInteger {
             carry = num / 10;
         }
         if (carry != 0) setDigAt(size(), carry);
+    }
+    
+    public void sub(BigInteger n) {
+        
     }
     
     public void multi(BigInteger n) {
@@ -46,6 +54,35 @@ public class BigInteger {
         number = ans.number;
     }
     
+    public void divideByTwo() {
+        BigInteger temp = new BigInteger("0");
+        for (int i = 1; i <= size(); i++) {
+            int a = getDigAt(i), b = getDigAt(i - 1);
+            int num = (b / 2);
+            if ((a % 2) != 0) num += 5;
+            if (i == size() && num == 0) continue;
+            temp.setDigAt(i - 1, num);
+        }
+        number = temp.number;
+    }
+    
+    public void divide(BigInteger n) {
+        BigInteger one = new BigInteger("1");
+        BigInteger lo = new BigInteger("0"), hi = this;
+        while (lessThan(lo, hi)) {
+            BigInteger mid = lo; mid.add(hi); mid.divideByTwo();
+            BigInteger temp = n; temp.multi(mid);
+            if (lessThan(temp, this)) {
+                hi = mid; hi.sub(one);
+            } else {
+                lo = mid; lo.add(one);
+            }
+        }
+        BigInteger temp = n; temp.multi(lo);
+        if (lessThan(temp, this)) lo.add(one);
+        number = lo.number;
+    }
+    
     public static void main(String[] args) {
         BigInteger bi1, bi2;
         
@@ -59,26 +96,6 @@ public class BigInteger {
         bi1.print();
         System.out.print("\n");
         
-        bi1 = new BigInteger("12345");
-        bi2 = new BigInteger("98766");
-        bi1.print();
-        System.out.print(" + ");
-        bi2.print();
-        System.out.print(" = ");
-        bi1.add(bi2);
-        bi1.print();
-        System.out.print("\n");
-        
-        bi1 = new BigInteger("12345");
-        bi2 = new BigInteger("2");
-        bi1.print();
-        System.out.print(" * ");
-        bi2.print();
-        System.out.print(" = ");
-        bi1.multi(bi2);
-        bi1.print();
-        System.out.print("\n");
-        
         bi1 = new BigInteger("1234512314546578785454512156456144789423");
         bi2 = new BigInteger("1000000000000000000");
         bi1.print();
@@ -87,6 +104,13 @@ public class BigInteger {
         System.out.print(" = ");
         bi1.multi(bi2);
         bi1.print();
+        System.out.print("\n");
+        
+        BigInteger bi = new BigInteger("1738");
+        bi.print();
+        System.out.print(" / 2 = ");
+        bi.divideByTwo();
+        bi.print();
         System.out.print("\n");
     }
     
