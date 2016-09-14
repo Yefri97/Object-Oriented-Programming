@@ -15,7 +15,30 @@ public class BigInteger {
     public void setDigAt(int idx, int dig) { number.setItemAt(idx, (char) (dig + '0')); }
     public int getDigAt(int idx) { return number.getItemAt(idx) - '0'; }
     
+    public String biToString() {
+        String ans = "";
+        for (int i = size() - 1; i >= 0; i--) {
+            ans += getDigAt(i);
+        }
+        return ans;
+    }
+    
     public static boolean lessThan(BigInteger a, BigInteger b) {
+        if (a.size() < b.size()) return true;
+        if (a.size() > b.size()) return false;
+        for (int i = a.size() - 1; i >= 0; i--) {
+            int na = a.getDigAt(i), nb = b.getDigAt(i);
+            if (na != nb) return na < nb;
+        }
+        return false;
+    }
+    
+    public static boolean equal(BigInteger a, BigInteger b) {
+        if (a.size() != b.size()) return false;
+        for (int i = 0; i < a.size(); i++) {
+            int na = a.getDigAt(i), nb = b.getDigAt(i);
+            if (na != nb) return false;
+        }
         return true;
     }
     
@@ -31,7 +54,16 @@ public class BigInteger {
     }
     
     public void sub(BigInteger n) {
-        
+        int len = Math.max(size(), n.size());
+        int loan = 0;
+        for (int i = 0; i < len; i++) {
+            int a = getDigAt(i), b = n.getDigAt(i);
+            a -= loan;
+            int temp = a - b;
+            loan = 0;
+            if (temp < 0) loan = 1;
+            setDigAt(i, (temp % 10 + 10) % 10);
+        }
     }
     
     public void multi(BigInteger n) {
@@ -66,24 +98,29 @@ public class BigInteger {
         number = temp.number;
     }
     
-    public void divide(BigInteger n) {
+    public void divide(BigInteger n) throws CloneNotSupportedException {
         BigInteger one = new BigInteger("1");
         BigInteger lo = new BigInteger("0"), hi = this;
+        String s;
         while (lessThan(lo, hi)) {
-            BigInteger mid = lo; mid.add(hi); mid.divideByTwo();
-            BigInteger temp = n; temp.multi(mid);
-            if (lessThan(temp, this)) {
-                hi = mid; hi.sub(one);
+            s = lo.biToString();
+            BigInteger mid = new BigInteger(s); mid.add(hi); mid.divideByTwo();
+            s = n.biToString();
+            BigInteger temp = new BigInteger(s); temp.multi(mid);
+            s = mid.biToString();
+            if (lessThan(temp, this) || equal(temp, this)) {
+                lo = new BigInteger(s); lo.add(one);
             } else {
-                lo = mid; lo.add(one);
+                hi = new BigInteger(s); hi.sub(one);
             }
         }
-        BigInteger temp = n; temp.multi(lo);
-        if (lessThan(temp, this)) lo.add(one);
+        s = n.biToString();
+        BigInteger temp = new BigInteger(s); temp.multi(lo);
+        if (!(lessThan(temp, this) || equal(temp, this))) lo.sub(one);
         number = lo.number;
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         BigInteger bi1, bi2;
         
         bi1 = new BigInteger("99999");
@@ -93,6 +130,16 @@ public class BigInteger {
         bi2.print();
         System.out.print(" = ");
         bi1.add(bi2);
+        bi1.print();
+        System.out.print("\n");
+        
+        bi1 = new BigInteger("20023");
+        bi2 = new BigInteger("32");
+        bi1.print();
+        System.out.print(" - ");
+        bi2.print();
+        System.out.print(" = ");
+        bi1.sub(bi2);
         bi1.print();
         System.out.print("\n");
         
@@ -106,11 +153,14 @@ public class BigInteger {
         bi1.print();
         System.out.print("\n");
         
-        BigInteger bi = new BigInteger("1738");
-        bi.print();
-        System.out.print(" / 2 = ");
-        bi.divideByTwo();
-        bi.print();
+        bi1 = new BigInteger("100000000000000000000000000000000000000000000000200000000000000");
+        bi2 = new BigInteger("2");
+        bi1.print();
+        System.out.print(" / ");
+        bi2.print();
+        System.out.print(" = ");
+        bi1.divide(bi2);
+        bi1.print();
         System.out.print("\n");
     }
     
