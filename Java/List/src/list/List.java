@@ -1,9 +1,12 @@
 package list;
 
+import java.util.Scanner;
+
 public class List {
 
-    private Node Head;
+    private Node Head, Last;
     private int N;
+    private int exch;
     
     private class Node {
         private Node next;
@@ -16,13 +19,15 @@ public class List {
     
     public List() {
         Node x = new Node(-1);
-        Head = x;
+        Head = Last = x;
     }
+    
+    public int size() { return N; }
     
     public void add(int k) {
         Node x = new Node(k);
-        x.next = Head.next;
-        Head.next = x;
+        Last.next = x;
+        Last = x; N++;
     }
     
     public void print() {
@@ -34,61 +39,65 @@ public class List {
         System.out.print("\n");
     }
     
-    public static void shell(List l, int h) {
-        int hc = h;
-        Node init = l.Head;
-        while (hc-- > 0) {
-            Node hare = init, prev = null;
-            for (int i = 0; hare.next != null; i = (i + 1) % h) {
-                if (i == 0) {
-                    Node tortoise = prev;
-                    
-                    // Casos iniciales
-                    int tn = h - 3;
-                    while (tn-- > 0 && tortoise != null) tortoise = tortoise.next;
-                    
-                    // Programar burbuja
-                    for (int j = 0; tortoise != null; j = (j + 1) % h) {
-                        if (j == 0) {
-                            if (hare.next.key < tortoise.next.key) {
-                                Node hn = hare.next, hnn = hare.next.next;
-                                hare.next = tortoise.next;
-                                tortoise.next = hn;
-                                hn.next = hare.next.next;
-                                hare.next = hnn;
-                                
-                            } else
-                                break;
-                        }
-                        tortoise = tortoise.next;
+    public static void bubbleHSort(List l, int h) {
+        if (h >= l.size() - 1) return;
+        for (int i = 0; i < Math.ceil((double) l.size() / h) - 1; i++) {
+            Node tortoise, hare;
+            tortoise = hare = l.Head;
+            int hc = h;
+            while (hc-- > 0) hare = hare.next;
+            while (hare.next != null) {
+                if (hare.next.key < tortoise.next.key) {
+                    Node pa = tortoise, a = pa.next, sa = a.next;
+                    Node pb = hare, b = pb.next, sb = b.next;
+                    a.next = sb;
+                    pa.next = b;
+                    if (sa == b) {
+                        b.next = a;
+                        hare = tortoise.next;
+                    } else {
+                        b.next = sa;
+                        pb.next = a;
                     }
-                    
+                    l.exch++;
                 }
-                Node temp = hare;
+                tortoise = tortoise.next;
                 hare = hare.next;
-                temp.next = prev;
-                prev = temp;
             }
-            
-            // Reorganizar lista
-            
-            init = init.next;
         }
     }
     
     public static void shellSort(List l, int v[]) {
-        for (int i = v.length - 1; i >= 0; i--)
-            shell(l, v[i]);
+        for (int i = v.length - 1; i >= 0; i--) {
+            bubbleHSort(l, v[i]);
+            System.out.println("Con h = " + v[i]);
+            System.out.println("Numero de cambios -> " + l.exch);
+            l.print();
+            System.out.println("");
+        }
     }
     
     public static void main(String[] args) {
+        int v[] = {9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1, 1, 1};
         List l = new List();
-        for (int i = 0; i < 10; i++)
-            l.add(i);
+        
+        for (int i = 0; i < v.length; i++)
+            l.add(v[i]);
+        
+        System.out.println("Lista a ordenar:");
         l.print();
-        int seq[] = {1, 4};
-        //System.out.print(seq.length + "\n");
+        int n_seq = (int) (Math.log(2 * l.size() + 1) / Math.log(3));
+        int[] seq = new int[n_seq];
+        for (int i = 0, k = 3; i < n_seq; i++, k *= 3)
+            seq[i] = (k - 1) / 2;
+        System.out.println("Secuencia a evaluar:");
+        for (int i = 0; i < seq.length; i++)
+            System.out.print(seq[i] + " ");
+        System.out.println("");
+        
         shellSort(l, seq);
+        System.out.println("Lista ordenada:");
+        l.print();
     }
     
 }
