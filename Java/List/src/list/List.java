@@ -34,8 +34,50 @@ public class List {
         System.out.print("\n");
     }
     
+    public static void shell(List l, int h) {
+        int hc = h;
+        Node init = l.Head;
+        while (hc-- > 0) {
+            Node hare = init, prev = null;
+            for (int i = 0; hare.next != null; i = (i + 1) % h) {
+                if (i == 0) {
+                    Node tortoise = prev;
+                    
+                    // Casos iniciales
+                    int tn = h - 3;
+                    while (tn-- > 0 && tortoise != null) tortoise = tortoise.next;
+                    
+                    // Programar burbuja
+                    for (int j = 0; tortoise != null; j = (j + 1) % h) {
+                        if (j == 0) {
+                            if (hare.next.key < tortoise.next.key) {
+                                Node hn = hare.next, hnn = hare.next.next;
+                                hare.next = tortoise.next;
+                                tortoise.next = hn;
+                                hn.next = hare.next.next;
+                                hare.next = hnn;
+                                
+                            } else
+                                break;
+                        }
+                        tortoise = tortoise.next;
+                    }
+                    
+                }
+                Node temp = hare;
+                hare = hare.next;
+                temp.next = prev;
+                prev = temp;
+            }
+            
+            // Reorganizar lista
+            
+            init = init.next;
+        }
+    }
+    
     public static void shellSort(List l, int v[]) {
-        for (int i = 0; i < v.size(); i++)
+        for (int i = v.length - 1; i >= 0; i--)
             shell(l, v[i]);
     }
     
@@ -44,6 +86,9 @@ public class List {
         for (int i = 0; i < 10; i++)
             l.add(i);
         l.print();
+        int seq[] = {1, 4};
+        //System.out.print(seq.length + "\n");
+        shellSort(l, seq);
     }
     
 }
