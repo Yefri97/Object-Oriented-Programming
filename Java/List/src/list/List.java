@@ -1,12 +1,15 @@
 package list;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class List {
 
     private Node Head, Last;
     private int N;
-    private int exch;
+    private int TotalExch;
+    private int Exch;
     
     private class Node {
         private Node next;
@@ -40,8 +43,10 @@ public class List {
     }
     
     public static void bubbleHSort(List l, int h) {
-        if (h >= l.size() - 1) return;
+        if (h > l.size() - 1) return;
+        l.Exch = 0;
         for (int i = 0; i < Math.ceil((double) l.size() / h) - 1; i++) {
+            int flag = 1;
             Node tortoise, hare;
             tortoise = hare = l.Head;
             int hc = h;
@@ -59,45 +64,63 @@ public class List {
                         b.next = sa;
                         pb.next = a;
                     }
-                    l.exch++;
+                    l.Exch++;
+                    flag = 0;
                 }
                 tortoise = tortoise.next;
                 hare = hare.next;
             }
+            if (flag == 1) break;
         }
     }
     
-    public static void shellSort(List l, int v[]) {
-        for (int i = v.length - 1; i >= 0; i--) {
-            bubbleHSort(l, v[i]);
-            System.out.println("Con h = " + v[i]);
-            System.out.println("Numero de cambios -> " + l.exch);
-            l.print();
-            System.out.println("");
-        }
-    }
-    
-    public static void main(String[] args) {
-        int v[] = {9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1, 1, 1};
-        List l = new List();
+    public static void shellSort(List l) {
         
-        for (int i = 0; i < v.length; i++)
-            l.add(v[i]);
-        
-        System.out.println("Lista a ordenar:");
-        l.print();
-        int n_seq = (int) (Math.log(2 * l.size() + 1) / Math.log(3));
+        int n_seq = (int) (Math.log(2 * l.size() - 1) / Math.log(3));
         int[] seq = new int[n_seq];
         for (int i = 0, k = 3; i < n_seq; i++, k *= 3)
             seq[i] = (k - 1) / 2;
-        System.out.println("Secuencia a evaluar:");
+        
+        System.out.println("Secuencia de h a evaluar:");
         for (int i = 0; i < seq.length; i++)
             System.out.print(seq[i] + " ");
-        System.out.println("");
+        System.out.println("\n");
         
-        shellSort(l, seq);
-        System.out.println("Lista ordenada:");
-        l.print();
+        l.TotalExch = 0;
+        for (int i = seq.length - 1; i >= 0; i--) {
+            bubbleHSort(l, seq[i]);
+            
+            System.out.println("Con h = " + seq[i]);
+            if (l.size() < 22) l.print();
+            System.out.println("Numero de cambios: " + l.Exch);
+            System.out.print("\n");
+            l.TotalExch += l.Exch;
+        }
+    }
+    
+    public static void main(String[] args) throws FileNotFoundException {
+        
+        Scanner sc = new Scanner(new File("/home/yefer/in.txt"));
+
+        List l = new List();
+        
+        while (sc.hasNextInt()) {
+          l.add(sc.nextInt());
+        }
+        
+        if (l.size() < 22) {
+            System.out.println("Lista a ordenar:");
+            l.print(); System.out.print("\n");
+        }
+        
+        shellSort(l);
+        
+        if (l.size() < 22) {
+            System.out.println("Lista ordenada:");
+            l.print();
+        }
+        
+        System.out.println("Total Exch: " + l.TotalExch);
     }
     
 }
