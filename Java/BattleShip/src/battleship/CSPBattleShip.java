@@ -56,7 +56,7 @@ public class CSPBattleShip {
     
     sumRows = new TotalSumRowConstraint(cells, row);
     sumCols = new TotalSumColConstraint(cells, col);
-    allUsed = new AllShipsUsedConstraint(cells, typeShips, sizeBoard);
+    allUsed = new AllShipsUsedConstraint(cells, typeShips);
     
     csp.addConstraint(sumRows);
     csp.addConstraint(sumCols);
