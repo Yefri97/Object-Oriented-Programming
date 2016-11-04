@@ -19,13 +19,12 @@ public class TotalSumColConstraint implements Constraint {
   
   private final int sizeBoard;
   private final List<Variable> scope;
-  private final List<Integer> totalSum;
+  private final List<Integer> totalSum = new ArrayList();
   
-  public TotalSumColConstraint(List<Variable> s, int[] row) {
+  public TotalSumColConstraint(List<Variable> s, int[] col) {
+    this.sizeBoard = col.length;
     this.scope = s;
-    this.sizeBoard = row.length;
-    totalSum = new ArrayList<Integer>(sizeBoard);
-    for (int i = 0; i < totalSum.size(); i++) totalSum.add(row[i]);
+    for (int i = 0; i < this.sizeBoard; i++) this.totalSum.add(col[i]);
   }
 
   @Override
@@ -39,8 +38,8 @@ public class TotalSumColConstraint implements Constraint {
       int cont = 0;
       for (int i = 0; i < sizeBoard; i++) {
         int idx = i * sizeBoard + j;
-        Variable var = new Variable("X_"+idx);
-        Integer value = (Integer)assignment.getAssignment(var);
+        Integer value = (Integer)assignment.getAssignment(scope.get(idx));
+        if (value == null) return true;
         if (value != 0) cont++;
       }
       if (cont != totalSum.get(j)) return false;

@@ -15,7 +15,8 @@ import java.util.List;
  * @author Yeferson Gaitan Gomez
  */
 public class CSPBattleShip {
-    
+   
+  private final int sizeBoard;
   private final List<Variable> cells = new ArrayList();
   private final Domain ships;
   private final Constraint sumRows;
@@ -32,6 +33,8 @@ public class CSPBattleShip {
    * @param col arreglo indica la suma total de cada columna
    */
   public CSPBattleShip(int sizeBoard, int[] typeShips, int[] row, int[] col) {
+    
+    this.sizeBoard = sizeBoard;
     
     // Genero todas las variables del tablero -> Xi
     for (int i = 0; i < sizeBoard * sizeBoard; i++) {
@@ -61,9 +64,20 @@ public class CSPBattleShip {
     
   }
   
-  public Assignment solver() {
+  public int[][] solver() {
     Assignment results = new BacktrackingStrategy().solve(csp);
-    return results;
+    
+    int board[][] = new int[sizeBoard][sizeBoard];
+      
+    for (int i = 0; i < sizeBoard; i++) {
+      for (int j = 0; j < sizeBoard; j++) {
+        int idx = i * sizeBoard + j;
+        Integer value = (Integer)results.getAssignment(cells.get(idx));
+        board[i][j] = value;
+      }
+    }
+    
+    return board;
   }
     
 }

@@ -19,13 +19,12 @@ public class TotalSumRowConstraint implements Constraint {
   
   private final int sizeBoard;
   private final List<Variable> scope;
-  private final List<Integer> totalSum;
+  private final List<Integer> totalSum = new ArrayList();
   
   public TotalSumRowConstraint(List<Variable> s, int[] row) {
-    this.scope = s;
     this.sizeBoard = row.length;
-    totalSum = new ArrayList<Integer>(sizeBoard);
-    for (int i = 0; i < totalSum.size(); i++) totalSum.add(row[i]);
+    this.scope = s;
+    for (int i = 0; i < this.sizeBoard; i++) this.totalSum.add(row[i]);
   }
 
   @Override
@@ -40,6 +39,7 @@ public class TotalSumRowConstraint implements Constraint {
       for (int j = 0; j < sizeBoard; j++) {
         int idx = i * sizeBoard + j;
         Integer value = (Integer)assignment.getAssignment(scope.get(idx));
+        if (value == null) return true;
         if (value != 0) cont++;
       }
       if (cont != totalSum.get(i)) return false;

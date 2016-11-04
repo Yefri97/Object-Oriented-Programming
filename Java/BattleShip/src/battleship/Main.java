@@ -1,11 +1,19 @@
 package battleship;
 
-import aima.core.search.csp.Assignment;
-import aima.core.search.csp.Variable;
 import java.util.Scanner;
 
 /**
- *
+ * ENTRADAS
+ * 3 2
+ * 2 2
+ * 1 2 1
+ * 2 0 2
+ * 
+ * 6 1
+ * 1
+ * 3 0 2 2 1 0
+ * 2 1 1 3 0 1
+ * 
  * @author Yeferson Gaitan Gomez
  */
 public class Main {
@@ -24,25 +32,13 @@ public class Main {
       int[] typeShip = new int[numShips];
       for (int i = 0; i < numShips; i++) typeShip[i] = sc.nextInt();
       
-      int[] row, col;
-      row = col = new int[sizeBoard];
+      int[] row = new int[sizeBoard], col = new int[sizeBoard];
       for (int i = 0; i < sizeBoard; i++) row[i] = sc.nextInt();
       for (int i = 0; i < sizeBoard; i++) col[i] = sc.nextInt();
       
       CSPBattleShip csp = new CSPBattleShip(sizeBoard, typeShip, row, col);
       
-      Assignment result = csp.solver();
-      
-      int board[][] = new int[sizeBoard][sizeBoard];
-      
-      for (int i = 0; i < sizeBoard; i++) {
-        for (int j = 0; j < sizeBoard; j++) {
-          int idx = i * sizeBoard + j;
-          Variable var = new Variable("X_"+idx);
-          Integer value = (Integer)result.getAssignment(var);
-          board[i][j] = value;
-        }
-      }
+      int board[][] = csp.solver();
       
       for (int i = 0; i < sizeBoard; i++) {
         for (int j = 0; j < sizeBoard; j++)
