@@ -21,6 +21,7 @@ public class CSPBattleShip {
   private final Domain waterOrShip;
   private final Constraint sumRows;
   private final Constraint sumCols;
+  private final Constraint allUsed;
   
   private final CSP csp;
   
@@ -55,9 +56,11 @@ public class CSPBattleShip {
     
     sumRows = new TotalSumRowConstraint(cells, row);
     sumCols = new TotalSumColConstraint(cells, col);
+    allUsed = new AllShipsUsedConstraint(cells, typeShips, sizeBoard);
     
     csp.addConstraint(sumRows);
     csp.addConstraint(sumCols);
+    csp.addConstraint(allUsed);
     
   }
   
