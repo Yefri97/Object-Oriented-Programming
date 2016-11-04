@@ -40,7 +40,7 @@ public class TotalSumColConstraint implements Constraint {
         int idx = i * sizeBoard + j;
         Integer value = (Integer)assignment.getAssignment(scope.get(idx));
         if (value == null) return true;
-        if (value != 0) cont++;
+        cont += value;
       }
       if (cont != totalSum.get(j)) return false;
     }

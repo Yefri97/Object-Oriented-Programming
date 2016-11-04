@@ -18,7 +18,7 @@ public class CSPBattleShip {
    
   private final int sizeBoard;
   private final List<Variable> cells = new ArrayList();
-  private final Domain ships;
+  private final Domain waterOrShip;
   private final Constraint sumRows;
   private final Constraint sumCols;
   
@@ -45,15 +45,12 @@ public class CSPBattleShip {
     csp = new CSP(cells);
     
     // Genero el dominio para las variables
-    // dominio = {0, 1, 2, 3, ... n} -> dominio[i] = id del barco
-    int numShips = typeShips.length;
-    List<Integer> domain = new ArrayList();
-    for (int i = 0; i <= numShips; i++) domain.add(i);
-    ships = new Domain(domain);
+    // dominio = {0, 1} -> 0: Agua, 1: Barco
+    waterOrShip = new Domain(new Object[] {0, 1});
     
     // Configuro el dominio para todas la variables del tablero
     for (int i = 0; i < sizeBoard * sizeBoard; i++) {
-      csp.setDomain(cells.get(i), ships);
+      csp.setDomain(cells.get(i), waterOrShip);
     }
     
     sumRows = new TotalSumRowConstraint(cells, row);
