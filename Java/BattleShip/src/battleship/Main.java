@@ -67,7 +67,7 @@ public class Main {
       if (isSolved) {
         for (int i = 0; i < sizeBoard; i++) {
           for (int j = 0; j < sizeBoard; j++)
-            System.out.print(board[i][j]);
+            System.out.print((board[i][j] == 1)? "*" : ".");
           System.out.print("\n");
         }
       } else {
