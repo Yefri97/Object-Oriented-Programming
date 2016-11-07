@@ -9,11 +9,6 @@ import aima.core.search.csp.Variable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Clase encargada de resolver el problema del BattleShip con un CSP
- *
- * @author Yeferson Gaitan Gomez
- */
 public class CSPBattleShip {
    
   private final int sizeBoard;
@@ -25,14 +20,6 @@ public class CSPBattleShip {
   
   private final CSP csp;
   
-  /**
-   * Constructor de la clase CSPBattleShip
-   * 
-   * @param sizeBoard entero indica el tamaño del tablero n x n
-   * @param typeShips arreglo indica el tamaño de cada barco
-   * @param row arreglo indica la suma total de cada fila
-   * @param col arreglo indica la suma total de cada columna
-   */
   public CSPBattleShip(int sizeBoard, int[] typeShips, int[] row, int[] col) {
     
     this.sizeBoard = sizeBoard;
@@ -54,12 +41,14 @@ public class CSPBattleShip {
       csp.setDomain(cells.get(i), waterOrShip);
     }
     
+    // Patron de diseño creacional: Factory Method
     Creator factory = new ConstraintCreator();
     
-    sumRows = factory.factoryMethod(cells, row, 1);
-    sumCols = factory.factoryMethod(cells, col, 2);
-    allUsed = factory.factoryMethod(cells, typeShips, 3);
+    sumRows = factory.factoryMethod(cells, row, 1); // TotalSumRowConstraint
+    sumCols = factory.factoryMethod(cells, col, 2); // TotalSumColConstraint
+    allUsed = factory.factoryMethod(cells, typeShips, 3); // AllShipsUsedConstraint
     
+    // Agrego las restricciones al problema
     csp.addConstraint(sumRows);
     csp.addConstraint(sumCols);
     csp.addConstraint(allUsed);
@@ -67,8 +56,10 @@ public class CSPBattleShip {
   }
   
   public boolean solver(int[][] board) {
+    // Solución por Backtracking
     Assignment results = new BacktrackingStrategy().solve(csp);
     
+    // Si existe una solución la retorna
     for (int i = 0; i < sizeBoard; i++) {
       for (int j = 0; j < sizeBoard; j++) {
         int idx = i * sizeBoard + j;

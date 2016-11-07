@@ -6,32 +6,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-/**
- * ENTRADAS
- * 3 2
- * 2 2
- * 1 2 1
- * 2 0 2
- * 
- * 4 3
- * 2 3 2
- * 3 0 2 2
- * 2 1 1 3
- * 
- * 6 4
- * 2 1 3 2
- * 3 0 2 2 1 0
- * 2 1 1 3 0 1
- * 
- * @author Yeferson Gaitan Gomez
- */
 public class Main {
  
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) throws FileNotFoundException, IOException {
       
+      // Aqui el usuario toma la desición de como ingresar los datos
       System.out.println("Que entrada desea utilizar?");
       System.out.println("1. Entrada por consola");
       System.out.println("2. Entrada por archivo");
@@ -40,6 +19,7 @@ public class Main {
       Scanner sc = new Scanner(System.in);
       String number = sc.nextLine();
       
+      // Patron de diseño comportamental: Strategy 
       Strategy initial = new ConsoleStrategy(sc);
       Context context = new Context(initial);
       switch (number) {
@@ -60,22 +40,28 @@ public class Main {
       }
       Scanner input = context.getInput();
       
+      // Tamaño del tablero
       int sizeBoard = input.nextInt();
       
+      // Numero de barcos
       int numShips = input.nextInt();
       
+      // Tamaño de los barcos
       int[] typeShip = new int[sizeBoard];
       for (int i = 0; i < numShips; i++) {
         int x = input.nextInt(); x--;
         typeShip[x]++;
       }
       
+      // Suma de las filas y de las columnas
       int[] row = new int[sizeBoard], col = new int[sizeBoard];
       for (int i = 0; i < sizeBoard; i++) row[i] = input.nextInt();
       for (int i = 0; i < sizeBoard; i++) col[i] = input.nextInt();
       
+      // Creo el Constraint Satisfaction Problem
       CSPBattleShip csp = new CSPBattleShip(sizeBoard, typeShip, row, col);
       
+      // Hallamos una solución al CSP
       int board[][] = new int[sizeBoard][sizeBoard];
       boolean isSolved = csp.solver(board);
       if (isSolved) {

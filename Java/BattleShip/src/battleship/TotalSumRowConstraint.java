@@ -6,15 +6,6 @@ import aima.core.search.csp.Variable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Clase que usa la interface Constraint para restringir la 
- * asignación correcta a la variables
- * 
- * Constraint: Verificar si la suma de las variables asignadas 
- * por cada fila cumplen con la especificada en el arreglo.
- *
- * @author Yeferson Gaitan Gomez
- */
 public class TotalSumRowConstraint implements Constraint {
   
   private final int sizeBoard;

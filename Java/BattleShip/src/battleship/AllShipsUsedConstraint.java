@@ -6,10 +6,6 @@ import aima.core.search.csp.Variable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Yeferson Gaitan Gomez
- */
 public class AllShipsUsedConstraint implements Constraint {
   
   private final int sizeBoard;

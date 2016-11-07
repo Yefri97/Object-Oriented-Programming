@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Context {
   Strategy c;
 
-  public Context(Strategy c){
+  public Context(Strategy c) {
     this.c = c;
   }
 
@@ -13,8 +13,7 @@ public class Context {
     this.c = c;
   }
   
-  public Scanner getInput()
-  {
+  public Scanner getInput() {
     return c.behaviour();
   }
 }
