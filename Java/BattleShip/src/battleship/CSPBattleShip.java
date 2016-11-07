@@ -54,9 +54,11 @@ public class CSPBattleShip {
       csp.setDomain(cells.get(i), waterOrShip);
     }
     
-    sumRows = new TotalSumRowConstraint(cells, row);
-    sumCols = new TotalSumColConstraint(cells, col);
-    allUsed = new AllShipsUsedConstraint(cells, typeShips);
+    Creator factory = new ConstraintCreator();
+    
+    sumRows = factory.factoryMethod(cells, row, 1);
+    sumCols = factory.factoryMethod(cells, col, 2);
+    allUsed = factory.factoryMethod(cells, typeShips, 3);
     
     csp.addConstraint(sumRows);
     csp.addConstraint(sumCols);
