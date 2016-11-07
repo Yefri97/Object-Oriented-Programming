@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  *
- * @author web
+ * @author Yeferson Gaitan Gomez
  */
 public class AllShipsUsedConstraint implements Constraint {
   
@@ -29,7 +29,9 @@ public class AllShipsUsedConstraint implements Constraint {
 
   @Override
   public boolean isSatisfiedWith(Assignment assignment) {
-    System.out.println(typeShips.get(0));
+    int[] ts = new int[sizeBoard];
+    for (int i = 0; i < sizeBoard; i++) ts[i] = typeShips.get(i);
+    
     int[][] board = new int[sizeBoard][sizeBoard];
     for (int i = 0; i < sizeBoard; i++) for (int j = 0; j < sizeBoard; j++) {
       int idx = i * sizeBoard + j;
@@ -37,7 +39,7 @@ public class AllShipsUsedConstraint implements Constraint {
       if (value == null) return true;
       board[i][j] = value;
     }
-    
+   
     int visit[][] = new int[sizeBoard][sizeBoard];
     for (int i = 0; i < sizeBoard; i++) for (int j = 0; j < sizeBoard; j++) {
       if (board[i][j] == 0 || visit[i][j] == 1) continue;
@@ -46,21 +48,25 @@ public class AllShipsUsedConstraint implements Constraint {
       if (j + 1 < sizeBoard && board[i][j + 1] == 1) { mi = 0; mj = 1; ok++; }
       if (i + 1 < sizeBoard && board[i + 1][j] == 1) { mi = 1; mj = 0; ok++; }
       
-      visit[i][j] = 1;
-      if (ok == 0) continue;
       if (ok == 2) return false;
       
       int cont = 1;
-      for (int k = i + mi, l = j + mj; k < sizeBoard && l < sizeBoard; k += mi, l += mj) {
-        if (board[k][l] == 0) break;
-        visit[k][l] = 1;
-        cont++;
+      visit[i][j] = 1;
+      if (ok == 1) {
+        for (int k = i + mi, l = j + mj; k < sizeBoard && l < sizeBoard && board[k][l] != 0; k += mi, l += mj) {
+          if (visit[k][l] == 1) return false;
+          if (l + 1 < sizeBoard && board[k][l + 1] == 1 && mi == 1) return false;
+          if (k + 1 < sizeBoard && board[k + 1][l] == 1 && mj == 1) return false;
+          visit[k][l] = 1;
+          cont++;
+        }
       }
-      int num = typeShips.get(cont - 1);
-      if (num == 0) return false;
-      typeShips.set(cont - 1, num - 1);
-    }
     
+      cont--;
+      if (ts[cont] == 0) return false;
+      ts[cont]--;
+      
+    }
     return true;
     
   }

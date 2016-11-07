@@ -22,7 +22,7 @@ import java.util.Scanner;
  * @author Yeferson Gaitan Gomez
  */
 public class Main {
-    
+ 
     /**
      * @param args the command line arguments
      */
