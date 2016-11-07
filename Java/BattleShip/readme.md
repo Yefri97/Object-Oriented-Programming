@@ -8,18 +8,25 @@ El puzzle de la batalla naval consiste de una cuadricula, una sumatoria de filas
 **Ejemplo:**
 
 Usando barcos de tamaño -> {1, 1, 2, 3}
-        . . . . . 1             . . . . # 1
-        . . . . . 3             # # # . . 3
-        . . . . . 0     -->     . . . . . 0
-        . . . . . 2             . . # # . 2
-        . . . . . 1             # . . . . 1
-        2 1 2 1 1               2 1 2 1 1
+
+. . . . X 1
+
+X X X . . 3
+
+. . . . . 0
+
+. . X X . 2
+
+X . . . . 1
+
+2 1 2 1 1
 
 **Solución:**
 
 Modelandolo como un problema por restricciones y haciendo una busqueda exhaustiva (Backtracking) usando la libreria AIMA (Artificial Intelligence Modern Approach) en JAVA se puede decir si el problema dado tiene solucion o no.
 
 ## Entrada:
+
 
 - Un entero n indicando el tamaño del tablero
 - Un entero m indicando el numero de barcos para usar
@@ -34,14 +41,21 @@ Modelandolo como un problema por restricciones y haciendo una busqueda exhaustiv
 **Entrada:**
 
 5 4
+
 1 1 2 3
+
 1 3 0 2 1
+
 2 1 2 1 1
 
 **Salida:**
 
 ....*
+
 ***..
+
 .....
+
 ..**.
+
 *....
