@@ -64,20 +64,20 @@ public class CSPBattleShip {
     
   }
   
-  public int[][] solver() {
+  public boolean solver(int[][] board) {
     Assignment results = new BacktrackingStrategy().solve(csp);
     
-    int board[][] = new int[sizeBoard][sizeBoard];
-      
     for (int i = 0; i < sizeBoard; i++) {
       for (int j = 0; j < sizeBoard; j++) {
         int idx = i * sizeBoard + j;
         Integer value = (Integer)results.getAssignment(cells.get(idx));
+        if (value == null) return false;
         board[i][j] = value;
       }
     }
     
-    return board;
+    return true;
+    
   }
     
 }
